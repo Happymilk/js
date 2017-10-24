@@ -5,15 +5,14 @@ var engine = {
     zombies:[],
     $lines: null,
     $gameOver:null,
+    zombie:null,
 
     bind: function () {
         engine.maxPosition = $("#field").width();
         engine.$lines = $(".field-line");
         engine.$gameOver = $(".game-over");
         $(".button#btnGenerate").on("click", engine.generate);
-        $(".button#btnSlow").on("click", engine.slowUp);
-        $(".button#btnOld").on("click", engine.growOld);
-        $(".button#btnExplode").on("click", engine.explode);
+        $(".button#btnExplode").on("click", engine.shot);
     },
 
     start: function () {
@@ -22,51 +21,15 @@ var engine = {
 
     generate: function () {
         if (!engine.finish) {
-            var type = random(1, 2);
-            var zombie;
-            switch (type) {
-                case 1:
-                    zombie = new Michael();
-                    break;
-                case 2:
-                    zombie = new Strong();
-                    break;
-            }
-            var lineNum = random(0, engine.$lines.length);
-            $(engine.$lines[lineNum]).append(zombie.$);
+            engine.zombies = [];
+            $(".zombie").remove();
+            zombie = new Default();
+            $(engine.$lines[0]).append(zombie.$);
             engine.zombies.push(zombie);
         }       
     },
 
-    slowUp:function(){
-        for (var i = 0; i < engine.zombies.length; i++) {
-            engine.zombies[i].slowUp(10000);
-        }
-    },
-
-    growOldActive:false,
-    growOld: function () {
-        if (!engine.growOldActive) {
-            engine.growOldActive = true;
-            var next = true;
-            function dicreaseHealth() {
-                for (var i = 0; i < engine.zombies.length; i++) {
-                    engine.zombies[i].damage.call(engine.zombies[i], 1);
-                }
-
-                if (next) {
-                    setTimeout(dicreaseHealth, 1000);
-                }
-            }
-            dicreaseHealth();
-            setTimeout(function () {
-                next = false;
-                engine.growOldActive = false;
-            }, 10000);
-        }       
-    },
-
-    explode: function(){
+    shot: function(){
         for (var i = 0; i < engine.zombies.length; i++) {
             engine.zombies[i].damage(15);
             var $expl = $("<div>").addClass("explosion");
@@ -96,5 +59,5 @@ var engine = {
 }
 
 function helper(expl) {
-    setTimeout(function () { expl.remove(); }, 400);
+    setTimeout(function () { expl.remove(); }, 500);
 }

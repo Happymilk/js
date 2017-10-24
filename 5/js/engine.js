@@ -11,8 +11,6 @@ var engine = {
         engine.$lines = $(".field-line");
         engine.$gameOver = $(".game-over");
         $(".button#btnGenerate").on("click", engine.generate);
-        $(".button#btnSlow").on("click", engine.slowUp);
-        $(".button#btnOld").on("click", engine.growOld);
         $(".button#btnExplode").on("click", engine.explode);
     },
 
@@ -20,22 +18,31 @@ var engine = {
         setTimeout(engine.gameTick, engine.tick);
     },
 
+    pause: function () {
+        $(".button#btnGenerate").text("Start");
+        $(".button#btnGenerate").on("click", engine.generate);
+    },
+
     generate: function () {
-        if (!engine.finish) {
-            var type = random(1, 2);
-            var zombie;
-            switch (type) {
-                case 1:
-                    zombie = new Michael();
-                    break;
-                case 2:
-                    zombie = new Strong();
-                    break;
-            }
-            var lineNum = random(0, engine.$lines.length);
-            $(engine.$lines[lineNum]).append(zombie.$);
-            engine.zombies.push(zombie);
-        }       
+        $(".button#btnGenerate").text("Pause");
+        $(".button#btnGenerate").on("click", engine.pause);
+        setTimeout(function() {
+            if (!engine.finish) {
+                var type = random(1, 2);
+                var zombie;
+                switch (type) {
+                    case 1:
+                        zombie = new Michael();
+                        break;
+                    case 2:
+                        zombie = new Strong();
+                        break;
+                }
+                var lineNum = random(0, engine.$lines.length);
+                $(engine.$lines[lineNum]).append(zombie.$);
+                engine.zombies.push(zombie);
+            }       
+        }, 2000);
     },
 
     slowUp:function(){

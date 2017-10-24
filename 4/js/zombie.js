@@ -2,7 +2,7 @@ function Zombie() {
     var protected = {};
 
     this.$ = $("<div>").addClass("zombie");
-    this.$.css("bottom", random(0, 40) + "px");
+    this.$.css("bottom", "0px");
     var $healthLine = $("<div>").addClass("health");
     this.$.append($healthLine);
 
